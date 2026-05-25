@@ -1,0 +1,132 @@
+[
+  {
+    "id": "seed-001",
+    "summary": "Brute-force SSH login from 45.33.32.156 targeting host prod-web-01. Over 500 failed login attempts in 10 minutes against user 'admin' followed by a successful login. Post-compromise: attacker downloaded cryptominer binary via curl, established persistence through crontab entry.",
+    "severity": "critical",
+    "conclusion": "Confirmed SSH brute-force leading to cryptominer deployment",
+    "confidence": 0.95,
+    "mitre_techniques": ["T1110.001", "T1059.004", "T1053.003", "T1496"],
+    "metadata": {
+      "attack_type": "brute_force",
+      "target_service": "ssh",
+      "outcome": "true_positive"
+    }
+  },
+  {
+    "id": "seed-002",
+    "summary": "PowerShell reverse-shell detected on workstation DESKTOP-FIN42. Process powershell.exe spawned with Base64-encoded command decoding to a TCP reverse shell connecting to 185.220.101.34:4444. Parent process was Microsoft Word (WINWORD.EXE) suggesting a malicious macro document.",
+    "severity": "critical",
+    "conclusion": "Macro-based initial access leading to PowerShell reverse shell",
+    "confidence": 0.97,
+    "mitre_techniques": ["T1566.001", "T1059.001", "T1204.002", "T1071.001"],
+    "metadata": {
+      "attack_type": "reverse_shell",
+      "target_service": "endpoint",
+      "outcome": "true_positive"
+    }
+  },
+  {
+    "id": "seed-003",
+    "summary": "Anomalous DNS queries from host HR-PC-07 to domain d8a3f.evil.com with high-entropy subdomain labels. Traffic pattern consistent with DNS tunneling exfiltration. Over 2,000 unique subdomain queries in 30 minutes, each carrying encoded data payloads in the subdomain field.",
+    "severity": "high",
+    "conclusion": "DNS tunneling data exfiltration via high-entropy subdomain queries",
+    "confidence": 0.88,
+    "mitre_techniques": ["T1048.001", "T1071.004", "T1132.001"],
+    "metadata": {
+      "attack_type": "dns_tunneling",
+      "target_service": "dns",
+      "outcome": "true_positive"
+    }
+  },
+  {
+    "id": "seed-004",
+    "summary": "Scheduled task created by user svc-backup on domain controller DC-01 that executes a suspicious binary from C:\\Windows\\Temp\\update.exe every 15 minutes. Binary is unsigned, has no version info, and connects to IP 91.215.85.142 on port 8443.",
+    "severity": "high",
+    "conclusion": "Persistence via scheduled task executing unsigned binary with C2 callback",
+    "confidence": 0.91,
+    "mitre_techniques": ["T1053.005", "T1543.003", "T1071.001"],
+    "metadata": {
+      "attack_type": "persistence",
+      "target_service": "active_directory",
+      "outcome": "true_positive"
+    }
+  },
+  {
+    "id": "seed-005",
+    "summary": "False positive: automated vulnerability scanner (Nessus) from 10.0.50.20 triggered multiple IDS alerts for SQL injection and XSS against web application servers. Source IP belongs to the security team's scanning subnet. Scan was pre-authorized and matched the weekly vulnerability assessment schedule.",
+    "severity": "low",
+    "conclusion": "Authorized vulnerability scan — false positive IDS alerts",
+    "confidence": 0.98,
+    "mitre_techniques": [],
+    "metadata": {
+      "attack_type": "vulnerability_scan",
+      "target_service": "web",
+      "outcome": "false_positive"
+    }
+  },
+  {
+    "id": "seed-006",
+    "summary": "Lateral movement detected: user jsmith's credentials used to authenticate via PsExec to 5 internal hosts within 3 minutes. Source was compromised workstation ACCT-PC-03. Attacker ran 'net user /domain' and 'nltest /dclist' for Active Directory reconnaissance before moving laterally.",
+    "severity": "critical",
+    "conclusion": "Credential-based lateral movement with AD reconnaissance",
+    "confidence": 0.93,
+    "mitre_techniques": ["T1021.002", "T1087.002", "T1018", "T1078.002"],
+    "metadata": {
+      "attack_type": "lateral_movement",
+      "target_service": "smb",
+      "outcome": "true_positive"
+    }
+  },
+  {
+    "id": "seed-007",
+    "summary": "Data staging and exfiltration: large RAR archive (4.2 GB) created in C:\\Users\\Public\\Documents on file server FS-01, containing files from finance share. Archive was then uploaded to mega.nz via Chrome browser process. User account was compromised service account svc-reports.",
+    "severity": "critical",
+    "conclusion": "Data exfiltration via cloud storage upload of staged financial data",
+    "confidence": 0.94,
+    "mitre_techniques": ["T1074.001", "T1560.001", "T1567.002"],
+    "metadata": {
+      "attack_type": "data_exfiltration",
+      "target_service": "file_server",
+      "outcome": "true_positive"
+    }
+  },
+  {
+    "id": "seed-008",
+    "summary": "False positive: Windows Update service (svchost.exe) connecting to Microsoft CDN endpoints triggered outbound traffic alert. Connections were to known Microsoft IP ranges and used standard TLS on port 443. Coincided with Patch Tuesday update cycle.",
+    "severity": "info",
+    "conclusion": "Routine Windows Update traffic — false positive",
+    "confidence": 0.99,
+    "mitre_techniques": [],
+    "metadata": {
+      "attack_type": "legitimate_traffic",
+      "target_service": "os_update",
+      "outcome": "false_positive"
+    }
+  },
+  {
+    "id": "seed-009",
+    "summary": "Privilege escalation via token impersonation on web server WEB-DMZ-02. Attacker exploited SeImpersonatePrivilege (Potato exploit variant) to escalate from IIS AppPool identity to SYSTEM. Subsequently dumped SAM database using reg save and extracted credentials.",
+    "severity": "critical",
+    "conclusion": "Token impersonation privilege escalation followed by credential dumping",
+    "confidence": 0.92,
+    "mitre_techniques": ["T1134.001", "T1068", "T1003.002"],
+    "metadata": {
+      "attack_type": "privilege_escalation",
+      "target_service": "web_server",
+      "outcome": "true_positive"
+    }
+  },
+  {
+    "id": "seed-010",
+    "summary": "Supply chain indicator: npm package 'event-stream-utils' loaded by build server BUILD-01 contains obfuscated code that exfiltrates environment variables (including CI/CD tokens) to external API endpoint api.analytics-cdn.net. Package was a typosquat of legitimate 'event-stream'.",
+    "severity": "high",
+    "conclusion": "Supply chain attack via typosquatted npm package stealing CI/CD credentials",
+    "confidence": 0.87,
+    "mitre_techniques": ["T1195.002", "T1027", "T1552.001"],
+    "metadata": {
+      "attack_type": "supply_chain",
+      "target_service": "ci_cd",
+      "outcome": "true_positive"
+    }
+  }
+]
