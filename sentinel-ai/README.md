@@ -59,6 +59,10 @@ Instead of relying on rigid, rule-based alerts, SENTINEL-AI acts as a live, auto
 
 ## 💻 Technology Stack & Scalability Choices
 
+### CAMEL AI (Agentic Framework)
+* **Purpose**: Foundational framework and design pattern for the Multi-Agent Society.
+* **Reason for Choice**: The orchestration architecture is deeply inspired by CAMEL (Communicative Agents for "Mind" Exploration of Large Scale Language Model Society). Specifically, the role-playing and communicative agent design is implemented in our **Debate Loop**, where the `IncidentCommanderAgent` and `RedTeamCriticAgent` engage in an adversarial, autonomous debate to continuously refine the final conclusion, challenge assumptions, and eliminate LLM hallucinations before raising human alerts.
+
 ### DuckDB (Data Lake)
 * **Purpose**: High-speed, persistent storage for raw events, enriched telemetry, and incident records.
 * **Reason for Choice**: Traditional SOCs rely on Elasticsearch or Splunk, which require massive JVM/Linux overhead. DuckDB provides blazing-fast vectorized analytical queries (OLAP) directly on local disk. It is natively embedded in Python, requires zero server setup, and scales effortlessly to millions of rows on a standard Windows machine.
